@@ -10,7 +10,7 @@ app.timer('averageRating', {
         {
             await sql.connect(CONN_STRING);
 
-            await sql.query('UPDATE dbo.Movies SET average_rating = (SELECT AVG(rating) FROM dbo.Ratings WHERE Movies.id = Ratings.movie_id)');
+            await sql.query('UPDATE dbo.Movies SET average_rating = (SELECT AVG(CAST(rating as FLOAT)) FROM dbo.Ratings WHERE Movies.id = Ratings.movie_id)');
 
             await sql.close();
 
