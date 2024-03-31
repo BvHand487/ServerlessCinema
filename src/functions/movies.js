@@ -1,12 +1,8 @@
 const { app } = require('@azure/functions');
 const sql = require('mssql');
 const { CONN_STRING } = require('../db/config.js');
+require('../utils/utils.js');
 
-
-// Returns true if all of the elements are contained in a target array.
-const containsAll = (array, elems) => {
-    return elems.every(e => array.includes(e))
-}
 
 app.http('movies', {
     methods: ['GET', 'POST'],
@@ -51,8 +47,8 @@ app.http('movies', {
 
 
             case 'POST':
-
-                if (!containsAll(Array.from(req.query.keys()), ['title', 'year', 'genre', 'description', 'director', 'actors']))
+                
+                if (!utils.containsAll(Array.from(req.query.keys()), ['title', 'year', 'genre', 'description', 'director', 'actors']))
                 {
                     await sql.close();
 
