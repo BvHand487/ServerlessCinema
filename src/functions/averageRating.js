@@ -21,7 +21,5 @@ app.timer('averageRating', {
             ctx.log('An error occured with the sql database.');
             ctx.log(err);
         }
-
-        context.extraOutputs.set(sqlOutput);
     }
 });

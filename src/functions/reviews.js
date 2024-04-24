@@ -3,7 +3,6 @@ const sql = require('mssql');
 const { CONN_STRING } = require('../db/config.js');
 const utils = require('../utils/utils.js');
 
-
 app.http('reviews', {
     methods: ['GET', 'POST'],
     authLevel: 'anonymous',
@@ -23,19 +22,19 @@ app.http('reviews', {
         {
             case 'GET':
 
-                let matchedRatings;
+                let matchedReviews;
 
                 // For a title, fetch reviews for best matched film
                 if (req.query.has('title'))
                 {
                     ctx.log('[GET] Searching reviews by title');
-                    matchedMovies = await sql.query(`SELECT Ratings.id, review, rating, date, author FROM Ratings LEFT JOIN Movies ON Ratings.movie_id = Movies.id WHERE Movies.title = (SELECT TOP 1 title FROM Movies WHERE DIFFERENCE(\'${req.query.get('title')}\', title) >= 1 ORDER BY DIFFERENCE(\'${req.query.get('title')}\', title) DESC)`);
+                    matchedReviews = await sql.query(`SELECT Ratings.id, review, rating, date, author FROM Ratings LEFT JOIN Movies ON Ratings.movie_id = Movies.id WHERE Movies.title = (SELECT TOP 1 title FROM Movies WHERE DIFFERENCE(\'${req.query.get('title')}\', title) >= 1 ORDER BY DIFFERENCE(\'${req.query.get('title')}\', title) DESC)`);
                 }
 
                 await sql.close();
                 return {
                     status: 200,
-                    jsonBody: matchedMovies.recordset,
+                    jsonBody: matchedReviews.recordset,
                 };
 
 

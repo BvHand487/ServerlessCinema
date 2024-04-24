@@ -1,6 +1,7 @@
 const { app } = require('@azure/functions');
 const sql = require('mssql');
 const { CONN_STRING } = require('../db/config.js');
+const md5 = require('js-md5');
 require('../utils/utils.js');
 
 
@@ -48,7 +49,7 @@ app.http('movies', {
 
             case 'POST':
                 
-                if (!utils.containsAll(Array.from(req.query.keys()), ['title', 'year', 'genre', 'description', 'director', 'actors']))
+                if (!utils.containsAll(Array.from(req.query.keys()), ['title', 'year', 'genre', 'description', 'director', 'actors', 'soundtrack', 'thumbnail']))
                 {
                     await sql.close();
 
@@ -69,6 +70,11 @@ app.http('movies', {
                 request.input('director', sql.VarChar(64), req.query.get('director'));
                 request.input('actors', sql.VarChar(512), req.query.get('actors'));
                 request.input('average_rating', sql.Int, 1);
+                
+                // save thumbnail and soundtrack to blob storage
+                
+                request.input('soundtrack', sql.VarChar(64), /* new soudtrack path */);
+                request.input('thumbnail', sql.VarChar(64), /* new thumnail path */);
             
                 const response = await request.query('INSERT INTO Movies (title, year, genre, description, director, actors) VALUES (@title, @year, @genre, @description, @director, @actors);');
 
