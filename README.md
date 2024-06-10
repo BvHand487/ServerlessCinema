@@ -1,5 +1,3 @@
-*Author: ChatGPT*
-
 # Cinema Azure Functions App
 
 ## Overview
